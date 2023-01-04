@@ -1,5 +1,8 @@
 package com.squareshift.store.checkout.squareshiftstorecheckout.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
 
 	private String category;
