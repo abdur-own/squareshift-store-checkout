@@ -78,11 +78,12 @@ public class CartServiceImpl implements CartService {
 	}
 
 	private long getShipingCharge(final WarehouseDistance wareHouseDistance, final long totalWeight) {
-		if (totalWeight <= 2) {
+		long weightInkg = (long) (totalWeight/1000.0);
+		if (weightInkg <= 2) {
 			return this.shipingCharges[0][getIndexAccordingToWeight(wareHouseDistance.getDistance_in_kilometers())];
-		} else if (totalWeight <= 5 && totalWeight > 2) {
+		} else if (weightInkg <= 5 && weightInkg > 2) {
 			return this.shipingCharges[1][getIndexAccordingToWeight(wareHouseDistance.getDistance_in_kilometers())];
-		} else if (totalWeight <= 20 && totalWeight > 5) {
+		} else if (weightInkg <= 20 && weightInkg > 5) {
 			return this.shipingCharges[2][getIndexAccordingToWeight(wareHouseDistance.getDistance_in_kilometers())];
 		} else {
 			return this.shipingCharges[3][getIndexAccordingToWeight(wareHouseDistance.getDistance_in_kilometers())];
