@@ -52,15 +52,22 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public CartItemsWithTotalAmount getCheckoutCartValue(final String shipping_postal_code) throws NumberFormatException {
-		// Taking last digit as the number of product in the cart
-		int numberOfProduct = (int) (Long.valueOf(shipping_postal_code) % 10);
+	public CartItemsWithTotalAmount getCheckoutCartValue(final String shipping_postal_code)
+			throws NumberFormatException {
 		CartItemsWithTotalAmount cartItems = new CartItemsWithTotalAmount();
+		WarehouseDistance wareHouseDistance = this.productDetailsService.getWarehouseDistance(shipping_postal_code);
+		setCartValues(shipping_postal_code, cartItems, wareHouseDistance);
+		return cartItems;
+	}
+
+	private void setCartValues(final String shipping_postal_code, CartItemsWithTotalAmount cartItems,
+			WarehouseDistance wareHouseDistance) {
+		// Taking last digit in the postal code as the number of product in the cart
+		int numberOfProduct = (int) (Long.valueOf(shipping_postal_code) % 10);
 		List<Product> products = new ArrayList<>();
 		double totalAmount = 0;
 		double totalWeight = 0;
 		double totalDiscount = 0;
-		WarehouseDistance wareHouseDistance = this.productDetailsService.getWarehouseDistance(shipping_postal_code);
 		for (int i = 100; i < (100 + numberOfProduct); i++) {
 			Product product = this.productDetailsService.getProduct(String.valueOf(i)).getResponse();
 			products.add(product);
@@ -74,11 +81,10 @@ public class CartServiceImpl implements CartService {
 		cartItems.setTotalWeight(totalWeight);
 		cartItems.setShipingCost(shipingCost);
 		cartItems.setTotalAmount(totalAmount + shipingCost);
-		return cartItems;
 	}
 
 	private double getShipingCharge(final WarehouseDistance wareHouseDistance, final double totalWeight) {
-		double weightInkg =  totalWeight/1000.0;
+		double weightInkg = totalWeight / 1000.0;
 		if (weightInkg <= 2) {
 			return this.shipingCharges[0][getIndexAccordingToWeight(wareHouseDistance.getDistance_in_kilometers())];
 		} else if (weightInkg <= 5 && weightInkg > 2) {
@@ -113,7 +119,7 @@ public class CartServiceImpl implements CartService {
 
 	private double getDiscount(Product product) {
 		double totalPriceAfterDiscount = ((product.getDiscount_percentage() / 100.00) * product.getPrice());
-		return  totalPriceAfterDiscount;
+		return totalPriceAfterDiscount;
 	}
 
 	@Override
