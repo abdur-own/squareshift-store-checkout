@@ -6,11 +6,11 @@ public class CartItemsWithTotalAmount {
 
 	private double totalAmount;
 
-	private long totalDiscount;
+	private double totalDiscount;
 
-	private long shipingCost;
+	private double shipingCost;
 
-	private long totalWeight;
+	private double totalWeight;
 
 	private List<Product> products;
 
@@ -30,27 +30,27 @@ public class CartItemsWithTotalAmount {
 		this.products = products;
 	}
 
-	public long getTotalDiscount() {
+	public double getTotalDiscount() {
 		return totalDiscount;
 	}
 
-	public void setTotalDiscount(long totalDiscount) {
+	public void setTotalDiscount(double totalDiscount) {
 		this.totalDiscount = totalDiscount;
 	}
 
-	public long getShipingCost() {
+	public double getShipingCost() {
 		return shipingCost;
 	}
 
-	public void setShipingCost(long shipingCost) {
+	public void setShipingCost(double shipingCost) {
 		this.shipingCost = shipingCost;
 	}
 
-	public long getTotalWeight() {
+	public double getTotalWeight() {
 		return totalWeight;
 	}
 
-	public void setTotalWeight(long totalWeight) {
+	public void setTotalWeight(double totalWeight) {
 		this.totalWeight = totalWeight;
 	}
 

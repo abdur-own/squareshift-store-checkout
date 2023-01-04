@@ -17,7 +17,7 @@ public class CartServiceImpl implements CartService {
 
 	private ProductDetailsService productDetailsService;
 
-	private static final int shipingCharges[][] = { { 12, 15, 20, 50, 100, 220 }, { 14, 18, 24, 55, 110, 250 },
+	private static final double shipingCharges[][] = { { 12, 15, 20, 50, 100, 220 }, { 14, 18, 24, 55, 110, 250 },
 			{ 16, 25, 30, 80, 130, 270 }, { 21, 35, 50, 90, 150, 300 } };
 
 	public CartServiceImpl(ProductDetailsService productDetailsService) {
@@ -57,9 +57,9 @@ public class CartServiceImpl implements CartService {
 		int numberOfProduct = (int) (Long.valueOf(shipping_postal_code) % 10);
 		CartItemsWithTotalAmount cartItems = new CartItemsWithTotalAmount();
 		List<Product> products = new ArrayList<>();
-		long totalAmount = 0;
-		long totalWeight = 0;
-		long totalDiscount = 0;
+		double totalAmount = 0;
+		double totalWeight = 0;
+		double totalDiscount = 0;
 		WarehouseDistance wareHouseDistance = this.productDetailsService.getWarehouseDistance(shipping_postal_code);
 		for (int i = 100; i < (100 + numberOfProduct); i++) {
 			Product product = this.productDetailsService.getProduct(String.valueOf(i)).getResponse();
@@ -68,17 +68,17 @@ public class CartServiceImpl implements CartService {
 			totalAmount = totalAmount + getDiscountedPrice(product);
 			totalDiscount = totalDiscount + getDiscount(product);
 		}
-		long shipingCost = getShipingCharge(wareHouseDistance, totalWeight);
+		double shipingCost = getShipingCharge(wareHouseDistance, totalWeight);
 		cartItems.setProducts(products);
 		cartItems.setTotalDiscount(totalDiscount);
 		cartItems.setTotalWeight(totalWeight);
 		cartItems.setShipingCost(shipingCost);
-		cartItems.setTotalAmount(totalAmount);
+		cartItems.setTotalAmount(totalAmount + shipingCost);
 		return cartItems;
 	}
 
-	private long getShipingCharge(final WarehouseDistance wareHouseDistance, final long totalWeight) {
-		long weightInkg = (long) (totalWeight/1000.0);
+	private double getShipingCharge(final WarehouseDistance wareHouseDistance, final double totalWeight) {
+		double weightInkg =  totalWeight/1000.0;
 		if (weightInkg <= 2) {
 			return this.shipingCharges[0][getIndexAccordingToWeight(wareHouseDistance.getDistance_in_kilometers())];
 		} else if (weightInkg <= 5 && weightInkg > 2) {
@@ -107,12 +107,13 @@ public class CartServiceImpl implements CartService {
 
 	}
 
-	private long getDiscountedPrice(Product product) {
+	private double getDiscountedPrice(Product product) {
 		return product.getPrice() - getDiscount(product);
 	}
 
-	private long getDiscount(Product product) {
-		return (long) ((product.getDiscount_percentage() / 100.00) * product.getPrice());
+	private double getDiscount(Product product) {
+		double totalPriceAfterDiscount = ((product.getDiscount_percentage() / 100.00) * product.getPrice());
+		return  totalPriceAfterDiscount;
 	}
 
 	@Override
