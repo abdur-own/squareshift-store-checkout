@@ -52,9 +52,9 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
-	public CartItemsWithTotalAmount getCheckoutCartValue(final long shipping_postal_code) {
+	public CartItemsWithTotalAmount getCheckoutCartValue(final String shipping_postal_code) throws NumberFormatException {
 		// Taking last digit as the number of product in the cart
-		int numberOfProduct = (int) (shipping_postal_code % 10);
+		int numberOfProduct = (int) (Long.valueOf(shipping_postal_code) % 10);
 		CartItemsWithTotalAmount cartItems = new CartItemsWithTotalAmount();
 		List<Product> products = new ArrayList<>();
 		long totalAmount = 0;
@@ -111,7 +111,7 @@ public class CartServiceImpl implements CartService {
 	}
 
 	private long getDiscount(Product product) {
-		return (product.getDiscount_percentage() / 100) * product.getPrice();
+		return (long) ((product.getDiscount_percentage() / 100.00) * product.getPrice());
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public interface CartService {
 	 * @param shipping_postal_code
 	 * @return CartItemsWithTotalAmount
 	 */
-	public CartItemsWithTotalAmount getCheckoutCartValue(final long shipping_postal_code);
+	public CartItemsWithTotalAmount getCheckoutCartValue(final String shipping_postal_code);
 
 	/**
 	 * @return

@@ -33,7 +33,7 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 	}
 
 	@Override
-	public WarehouseDistance getWarehouseDistance(long postalCode) {
+	public WarehouseDistance getWarehouseDistance(final String postalCode) {
 		String wareHouseDistanceUrl = format(getWarehouseDistanceUrl, postalCode);
 		return webClient.get().uri(wareHouseDistanceUrl).retrieve().bodyToMono(WarehouseDistance.class).block();
 	}

@@ -42,10 +42,14 @@ public class CartController {
 	}
 
 	@GetMapping(value = "/cart/checkout-value")
-	public ResponseEntity<CartItemsWithTotalAmount> getCheckoutValue(@RequestParam long shipping_postal_code) {
-		validatePostalCode(shipping_postal_code);
-		CartItemsWithTotalAmount checkoutValue = this.cartService.getCheckoutCartValue(shipping_postal_code);
-		return new ResponseEntity<>(checkoutValue, HttpStatus.OK);
+	public ResponseEntity<CartItemsWithTotalAmount> getCheckoutValue(@RequestParam String shipping_postal_code) {
+		try {
+			validatePostalCode(Long.valueOf(shipping_postal_code));
+			CartItemsWithTotalAmount checkoutValue = this.cartService.getCheckoutCartValue(shipping_postal_code);
+			return new ResponseEntity<>(checkoutValue, HttpStatus.OK);
+		} catch (NumberFormatException e) {
+			throw new BadRequestException("Invalid postal code, valid ones are 465535 to 465545.");
+		}
 
 	}
 

@@ -15,5 +15,5 @@ public interface ProductDetailsService {
 	 * @param postalCode
 	 * @return WarehouseDistance
 	 */
-	public WarehouseDistance getWarehouseDistance(long postalCode);
+	public WarehouseDistance getWarehouseDistance(final String postalCode);
 }
